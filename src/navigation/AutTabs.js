@@ -5,7 +5,7 @@ import { Login, Cadastro } from  '../telas'
 const Tab = createBottomTabNavigator();
 
 // Telas de autenticação
-export default function TelasAut() {
+export default function AutTabs() {
   return (
     <Tab.Navigator>
       <Tab.Screen

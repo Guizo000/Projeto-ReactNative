@@ -15,7 +15,8 @@ export default function Login() {
       if (senhaSalva !== null) {
         if (senhaSalva === senha) {
           Alert.alert('Sucesso', 'Logado com sucesso!');
-          navigation.replace('MainStack'); // troca a navegação pra o app principal
+          await AsyncStorage.setItem('@usuario', usuario); // Guarda o usuário logado para usar no futuro
+          navigation.replace('MainTabs'); // Troca a navegação pra o app principal
         } else {
           Alert.alert('Erro', 'Senha incorreta!');
         }
