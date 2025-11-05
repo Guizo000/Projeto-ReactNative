@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Button, FlatList, TouchableOpacity } from 'react-native';
+import { View, Text, Button, FlatList, TouchableOpacity, Alert } from 'react-native';
 import { useRoute, useNavigation, useIsFocused } from '@react-navigation/native';
 import { getDecks, excluirCard } from '../utils/decks';
 import { usuarioLogado } from '../utils/usuario'
@@ -40,7 +40,19 @@ export default function DeckDetails() {
     setDeck(deckEncontrado);
   }
 
-  //Fução para remover card
+  //Confirmar remoção de card
+  async function confirmarRemover(cardId) {
+    Alert.alert(
+      'Excluir Card',
+      'Tem certeza que deseja excluir este card?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Excluir', style: 'destructive', onPress: () => removerCard(cardId) },
+      ]
+    );
+  }
+
+  //Remoção de card
   async function removerCard(cardId) {
     await excluirCard(usuario, deck.id, cardId);
     carregarDeck(); // recarrega o deck atualizado
@@ -77,7 +89,7 @@ export default function DeckDetails() {
             <Button
             title="Excluir"
             color="red"
-            onPress={() => removerCard(item.id)}
+            onPress={() => confirmarRemover(item.id)}
             />
           </View>
         )}

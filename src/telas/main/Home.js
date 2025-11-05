@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Button, FlatList, TouchableOpacity} from 'react-native';
+import { View, Text, Button, FlatList, TouchableOpacity, Alert} from 'react-native';
 import { getDecks, excluirDeck} from '../utils/decks';
 import { usuarioLogado } from '../utils/usuario'
 import { useNavigation, useIsFocused } from '@react-navigation/native';
@@ -40,7 +40,19 @@ export default function Home() {
     }
   }
 
-  //Função que exlui deck
+  //Confirmar remoção de deck
+  async function confirmarRemocao(deckID) {
+    Alert.alert(
+      'Excluir Deck',
+      'Tem certeza que deseja excluir este deck?',
+      [
+        { text: 'Cancelar', style: 'cancel' },
+        { text: 'Excluir', style: 'destructive', onPress: () => removerDeck(deckID) },
+      ]
+    );
+  }
+
+  //Função que exlui o deck
   async function removerDeck(deckId) {
     await excluirDeck(usuario, deckId);
     carregarDecks(); // recarrega lista
@@ -74,7 +86,7 @@ export default function Home() {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View> 
-              <TouchableOpacity onPress={() => acessarDeck(item.id)}>
+              <TouchableOpacity onPress={() => confirmarRemocao(item.id)}>
                 <Text>{item.titulo}</Text>
                 <Text>{item.cards.length} cards</Text>
               </TouchableOpacity>
