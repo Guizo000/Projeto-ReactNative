@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import { View, Text, Button, FlatList, TouchableOpacity} from 'react-native';
-import { getDecks } from '../utils/decks';
+import { getDecks, excluirDeck} from '../utils/decks';
 import { usuarioLogado } from '../utils/usuario'
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 
@@ -40,6 +40,12 @@ export default function Home() {
     }
   }
 
+  //Função que exlui deck
+  async function removerDeck(deckId) {
+    await excluirDeck(usuario, deckId);
+    carregarDecks(); // recarrega lista
+  }
+
   //Função para deslogar
   function deslogar(){
     navigation.replace("AutTabs"); 
@@ -72,10 +78,18 @@ export default function Home() {
           data={decks}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <TouchableOpacity onPress={() => acessarDeck(item.id)}>
-              <Text>{item.titulo}</Text>
-              <Text>{item.cards.length} cards</Text>
-            </TouchableOpacity>
+            <View> 
+              <TouchableOpacity onPress={() => acessarDeck(item.id)}>
+                <Text>{item.titulo}</Text>
+                <Text>{item.cards.length} cards</Text>
+              </TouchableOpacity>
+
+              <Button
+              title="Excluir"
+              onPress={() => removerDeck(item.id)}
+              color="red"
+              />
+            </View>
           )}
         />
       )}

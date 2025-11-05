@@ -18,7 +18,7 @@ export async function getDecks(usuario) {
   }
 }
 
-// Adiciona um novo deck ao usuário 
+// Adiciona um novo deck  
 export async function saveDeck(usuario, novoDeck) {
   try {
     //Define a chave para acessar os decks do usuário atual
@@ -37,6 +37,23 @@ export async function saveDeck(usuario, novoDeck) {
   }
 }
 
+// Exclui um deck
+export async function excluirDeck(usuario, deckId) {
+  try {
+    // Busca todos os decks do usuário
+    const jsonValue = await AsyncStorage.getItem(`@decks_${usuario}`);
+    const decks = jsonValue ? JSON.parse(jsonValue) : [];
+
+    // Filtra de forma a selecionar todos menos o deck a ser excluído
+    const decksAtualizados = decks.filter(d => d.id !== deckId);
+
+    // Salva os decks atualizados sem o deck a ser removido
+    await AsyncStorage.setItem(`@decks_${usuario}`, JSON.stringify(decksAtualizados));
+  } catch (erro) {
+    console.log(erro);
+    Alert.alert('Erro', 'Falha ao tentar excluir deck'); 
+  }
+}
 
 // Adiciona um novo card a um deck específico
 export async function addCardToDeck(usuario, deckId, card) {
@@ -45,7 +62,7 @@ export async function addCardToDeck(usuario, deckId, card) {
     const decks = await getDecks(usuario);
 
     //Cria um novo deck atualizado
-    //Map percorre cada deck, ao encontrar o deck cm id certo
+    //Map percorre cada deck, ao encontrar o deck com id certo
     //Cria um novo objeto
     const decksAtualizados = decks.map(deck => {
       if (deck.id === deckId) {
@@ -55,7 +72,7 @@ export async function addCardToDeck(usuario, deckId, card) {
     });
 
     await AsyncStorage.setItem(key, JSON.stringify(decksAtualizados));
-    return decksAtualizados;
+    return decksAtualizados; 
   }catch(erro){
     console.log(erro);
     Alert.alert('Erro', 'Falha ao tentar adicionar carta ao deck'); 
