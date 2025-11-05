@@ -54,6 +54,11 @@ export default function DeckDetails() {
         onPress={() => navigation.navigate('AddCard', { deckId: deck.id })}
       />
 
+      <Button
+        title="Iniciar Estudo"
+        onPress={() => navigation.navigate('Estudo', { deckId: deck.id })}
+      />
+      
       <FlatList
         data={deck.cards}
         keyExtractor={(item) => item.id}
