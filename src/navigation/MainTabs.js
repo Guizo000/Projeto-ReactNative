@@ -13,6 +13,7 @@ export default function MainTabs() {
         name="HomeStack"
         component={HomeStack}
         options={{
+          tabBarLabel: 'Home',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="home" color={color} size={size} />
           ),
@@ -22,6 +23,7 @@ export default function MainTabs() {
         name="ConfigStack"
         component={ConfigStack}
         options={{
+          tabBarLabel: 'Configurações',
           tabBarIcon: ({ color, size }) => (
             <MaterialCommunityIcons name="account-cog" color={color} size={size} />
           ),

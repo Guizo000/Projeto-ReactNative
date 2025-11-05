@@ -7,8 +7,8 @@ const Stack = createNativeStackNavigator();
 export default function HomeStack() {
   return (
     <Stack.Navigator>
-        <Stack.Screen name="Configuracoes" component={Configuracoes} />
-        <Stack.Screen name="AlterarSenha" component={AlterarSenha} />
+        <Stack.Screen name="Configuracoes" component={Configuracoes} options={{ title: 'Configurações' }}/>
+        <Stack.Screen name="AlterarSenha" component={AlterarSenha} options={{ title: 'Alterar Senha' }}/>
     </Stack.Navigator>
   );
 }

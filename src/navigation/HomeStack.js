@@ -7,12 +7,12 @@ const Stack = createNativeStackNavigator();
 export default function HomeStack() {
   return (
     <Stack.Navigator>
-        <Stack.Screen name="Home" component={Home} />
-        <Stack.Screen name="CriarDeck" component={CriarDeck} />
-        <Stack.Screen name="DeckDetalhes" component={DeckDetalhes} />
-        <Stack.Screen name="AddCard" component={AddCard} />
-        <Stack.Screen name="Estudo" component={Estudo} />
-        <Stack.Screen name="EditarCard" component={EditarCard} />
+        <Stack.Screen name="Home" component={Home} options={{ title: 'Home' }}/>
+        <Stack.Screen name="CriarDeck" component={CriarDeck} options={{ title: 'Criar Deck' }}/>
+        <Stack.Screen name="DeckDetalhes" component={DeckDetalhes} options={{ title: 'Detalhes do Deck' }}/>
+        <Stack.Screen name="AddCard" component={AddCard} options={{ title: 'Adicionar Card' }}/>
+        <Stack.Screen name="Estudo" component={Estudo} options={{ title: 'Estudo' }}/>
+        <Stack.Screen name="EditarCard" component={EditarCard} options={{ title: 'Editar Card' }}/>
     </Stack.Navigator>
   );
 }

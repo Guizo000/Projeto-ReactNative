@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet, Image } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
+import logo from '../../assets/logo.png';
 
 export default function Login() {
   const [usuario, setUsuario] = useState('');
@@ -31,6 +32,8 @@ export default function Login() {
 
   return (
     <View style={styles.container}>
+      <Image source={logo} style={styles.logo} />
+      <Text style={styles.appTitle}>Dragon Study</Text>
       <Text style={styles.title}>Bem-vindo de volta!</Text>
 
       <TextInput
@@ -51,7 +54,6 @@ export default function Login() {
       <View style={styles.buttonContainer}>
         <Button title="Entrar" onPress={ler} color="#3b82f6" />
       </View>
-
     </View>
   );
 }
@@ -63,6 +65,17 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     backgroundColor: '#f9fafb',
     paddingHorizontal: 20,
+  },
+  logo: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
+  },
+  appTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#3b82f6',
+    marginBottom: 20,
   },
   title: {
     fontSize: 26,
@@ -86,10 +99,5 @@ const styles = StyleSheet.create({
     marginTop: 10,
     borderRadius: 10,
     overflow: 'hidden',
-  },
-  link: {
-    marginTop: 25,
-    color: '#3b82f6',
-    fontWeight: '500',
   },
 });

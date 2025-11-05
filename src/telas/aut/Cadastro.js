@@ -1,7 +1,8 @@
 import { useState } from 'react';
-import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet, Image } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import logo from '../../assets/logo.png';
 
 export default function Cadastro() {
   const [user, setUser] = useState('');
@@ -11,7 +12,6 @@ export default function Cadastro() {
   async function gravar() {
     try {
       const senha = await AsyncStorage.getItem(user);
-
       if (senha != null) {
         Alert.alert('Erro', 'Usuário já cadastrado!');
         return;
@@ -28,6 +28,8 @@ export default function Cadastro() {
 
   return (
     <View style={styles.container}>
+      <Image source={logo} style={styles.logo} />
+      <Text style={styles.appTitle}>Dragon Study</Text>
       <Text style={styles.title}>Crie sua conta</Text>
 
       <TextInput
@@ -60,6 +62,17 @@ const styles = StyleSheet.create({
     backgroundColor: '#f9fafb',
     paddingHorizontal: 20,
   },
+  logo: {
+    width: 100,
+    height: 100,
+    marginBottom: 10,
+  },
+  appTitle: {
+    fontSize: 22,
+    fontWeight: 'bold',
+    color: '#3b82f6',
+    marginBottom: 20,
+  },
   title: {
     fontSize: 26,
     fontWeight: 'bold',
@@ -81,11 +94,6 @@ const styles = StyleSheet.create({
     width: '100%',
     marginTop: 10,
     borderRadius: 10,
-    overflow: 'hidden', // pra arredondar o botão do Android
-  },
-  voltar: {
-    marginTop: 25,
-    color: '#3b82f6',
-    fontWeight: '500',
+    overflow: 'hidden',
   },
 });
