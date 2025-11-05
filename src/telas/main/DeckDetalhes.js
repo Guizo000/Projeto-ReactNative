@@ -31,6 +31,12 @@ export default function DeckDetails() {
     if (usuario) carregarDeck();
   }, [usuario, isFocused]);
 
+
+  //Função para ir a pagina de detalhes de um deck
+  function acessarCard(deckId, cardId, perguntaInicial, respostaInicial){
+    navigation.navigate("EditarCard", {deckId, cardId, perguntaInicial, respostaInicial});
+  }
+
   //Carrega o deck selecionado pelo usuario na tela anterior
   async function carregarDeck() {
     //Retorna todos os decks do usuario
@@ -82,7 +88,7 @@ export default function DeckDetails() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View>
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => acessarCard(deckId, item.id, item.pergunta, item.resposta)}>
               <Text>{item.pergunta}</Text>
             </TouchableOpacity>
 

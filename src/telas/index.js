@@ -8,5 +8,5 @@ export { default as AddCard } from './main/AddCard';
 export { default as Estudo } from './main/Estudo';
 export { default as Configuracoes } from './main/Configuracoes';
 export { default as AlterarSenha} from './main/AlterarSenha';
-
+export { default as EditarCard} from './main/EditarCard';
 

@@ -101,3 +101,37 @@ export async function excluirCard(usuario, deckId, cardId) {
     Alert.alert('Erro', 'Falha ao tentar excluir card'); 
   }
 }
+
+// Edita um card existente
+export async function editarCard(usuario, deckId, cardId, novaPergunta, novaResposta) {
+  try {
+    // Pega todos os decks do usuário
+    const decks = await getDecks(usuario);
+
+    // Acha o deck correto
+    const deckIndex = decks.findIndex(d => d.id === deckId);
+    if (deckIndex === -1) {
+      throw new Error('Deck não encontrado');
+    }
+
+    // Acha o card correto dentro do deck
+    const cardIndex = decks[deckIndex].cards.findIndex(c => c.id === cardId);
+    if (cardIndex === -1) {
+      throw new Error('Card não encontrado');
+    }
+
+    // Atualiza os dados do card
+    decks[deckIndex].cards[cardIndex] = {
+      ...decks[deckIndex].cards[cardIndex],
+      pergunta: novaPergunta,
+      resposta: novaResposta,
+    };
+
+    // Salva os decks atualizados de volta no AsyncStorage
+    await AsyncStorage.setItem(`@decks_${usuario}`, JSON.stringify(decks));
+    return true;
+  } catch (erro) {
+
+    return false;
+  }
+}

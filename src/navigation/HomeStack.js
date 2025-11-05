@@ -1,5 +1,5 @@
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
-import { Home, CriarDeck, DeckDetalhes, AddCard, Estudo} from  '../telas'
+import { Home, CriarDeck, DeckDetalhes, AddCard, Estudo, EditarCard } from  '../telas'
 
 const Stack = createNativeStackNavigator();
 
@@ -11,6 +11,7 @@ export default function HomeStack() {
         <Stack.Screen name="DeckDetalhes" component={DeckDetalhes} />
         <Stack.Screen name="AddCard" component={AddCard} />
         <Stack.Screen name="Estudo" component={Estudo} />
+        <Stack.Screen name="EditarCard" component={EditarCard} />
     </Stack.Navigator>
   );
 }
