@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Button, FlatList, TouchableOpacity, StyleSheet } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
+import { View, Text, Button, FlatList, TouchableOpacity} from 'react-native';
 import { getDecks } from '../utils/decks';
+import { usuarioLogado } from '../utils/usuario'
 import { useNavigation, useIsFocused } from '@react-navigation/native';
 
 export default function Home() {
@@ -18,24 +18,19 @@ export default function Home() {
 
   //Função chamada no UseEffect para definir o usuário atualmente logado
   async function setUsuarioLogado() {
-    try{
-      const usuarioAtual = await AsyncStorage.getItem('@usuario');
+      const usuarioAtual = await usuarioLogado();
       setUsuario(usuarioAtual);
-    }catch(erro){
-      console.log(erro);
-      Alert.alert('Erro', 'Falha ao tentar definir o usuário logado!');
-    }
   }
 
   //UseEffect para quando isFocused ou usuario mudam
   //Serve para dar reload nos decks sempre que o usuário volta pra essa pagina
   //usuario serve pra primeira
   useEffect(() => {
-    if (usuario) loadDecks();
+    if (usuario) carregarDecks();
   }, [usuario, isFocused]);
 
   //Função que carrega os decks
-  async function loadDecks() {
+  async function carregarDecks() {
     try{
       const dados = await getDecks(usuario);
       setDecks(dados);
@@ -53,6 +48,11 @@ export default function Home() {
   //Função para ir a pagina de criação de decks
   function criarDeck(){
     navigation.navigate("CriarDeck");
+  }
+
+  //Função para ir a pagina de detalhes de um deck
+  function acessarDeck(deckId){
+    navigation.navigate("DeckDetalhes", {deckId});
   }
       
   return (
@@ -72,7 +72,7 @@ export default function Home() {
           data={decks}
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
-            <TouchableOpacity>
+            <TouchableOpacity onPress={() => acessarDeck(item.id)}>
               <Text>{item.titulo}</Text>
               <Text>{item.cards.length} cards</Text>
             </TouchableOpacity>

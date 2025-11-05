@@ -36,3 +36,29 @@ export async function saveDeck(usuario, novoDeck) {
     Alert.alert('Erro', 'Falha ao tentar salvar deck!'); 
   }
 }
+
+
+// Adiciona um novo card a um deck específico
+export async function addCardToDeck(usuario, deckId, card) {
+  try{
+    const key = `@decks_${usuario}`;
+    const decks = await getDecks(usuario);
+
+    //Cria um novo deck atualizado
+    //Map percorre cada deck, ao encontrar o deck cm id certo
+    //Cria um novo objeto
+    const decksAtualizados = decks.map(deck => {
+      if (deck.id === deckId) {
+        return { ...deck, cards: [...deck.cards, card] };
+      }
+      return deck;
+    });
+
+    await AsyncStorage.setItem(key, JSON.stringify(decksAtualizados));
+    return decksAtualizados;
+  }catch(erro){
+    console.log(erro);
+    Alert.alert('Erro', 'Falha ao tentar adicionar carta ao deck'); 
+  }
+  
+}
