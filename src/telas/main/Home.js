@@ -86,14 +86,14 @@ export default function Home() {
           keyExtractor={(item) => item.id}
           renderItem={({ item }) => (
             <View> 
-              <TouchableOpacity onPress={() => confirmarRemocao(item.id)}>
+              <TouchableOpacity onPress={() => acessarDeck(item.id)}>
                 <Text>{item.titulo}</Text>
                 <Text>{item.cards.length} cards</Text>
               </TouchableOpacity>
 
               <Button
               title="Excluir"
-              onPress={() => removerDeck(item.id)}
+              onPress={() => confirmarRemocao(item.id)}
               color="red"
               />
             </View>
