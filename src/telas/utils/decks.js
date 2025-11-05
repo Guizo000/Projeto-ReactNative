@@ -1,4 +1,5 @@
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Alert } from 'react-native';
 
 // Retorna todos os decks de um usuário 
 export async function getDecks(usuario) {
@@ -12,6 +13,7 @@ export async function getDecks(usuario) {
     Caso não encontre nada retorna um array vazio
     */
     return data ? JSON.parse(data) : [];
+
   }catch(erro){
     console.log(erro);
     Alert.alert('Erro', 'Falha ao tentar retornar decks!');
@@ -29,8 +31,10 @@ export async function saveDeck(usuario, novoDeck) {
     const deckAtualizado = [...decks, novoDeck];
     //Atualiza os decks do usuário no async storage
     await AsyncStorage.setItem(key, JSON.stringify(deckAtualizado));
+    Alert.alert('Sucesso', 'Deck criado com sucesso!');
     //Retorna o deckAtualizado
     return deckAtualizado;
+
   }catch(erro){
     console.log(erro);
     Alert.alert('Erro', 'Falha ao tentar salvar deck!'); 
@@ -49,6 +53,7 @@ export async function excluirDeck(usuario, deckId) {
 
     // Salva os decks atualizados sem o deck a ser removido
     await AsyncStorage.setItem(`@decks_${usuario}`, JSON.stringify(decksAtualizados));
+
   } catch (erro) {
     console.log(erro);
     Alert.alert('Erro', 'Falha ao tentar excluir deck'); 
@@ -73,6 +78,7 @@ export async function addCardToDeck(usuario, deckId, card) {
 
     await AsyncStorage.setItem(key, JSON.stringify(decksAtualizados));
     return decksAtualizados; 
+
   }catch(erro){
     console.log(erro);
     Alert.alert('Erro', 'Falha ao tentar adicionar carta ao deck'); 
@@ -96,6 +102,7 @@ export async function excluirCard(usuario, deckId, cardId) {
 
     // Salva os decks atualizados
     await AsyncStorage.setItem(`@decks_${usuario}`, JSON.stringify(decksAtualizados));
+
   } catch (erro) {
     console.log(erro);
     Alert.alert('Erro', 'Falha ao tentar excluir card'); 
@@ -110,15 +117,9 @@ export async function editarCard(usuario, deckId, cardId, novaPergunta, novaResp
 
     // Acha o deck correto
     const deckIndex = decks.findIndex(d => d.id === deckId);
-    if (deckIndex === -1) {
-      throw new Error('Deck não encontrado');
-    }
 
     // Acha o card correto dentro do deck
     const cardIndex = decks[deckIndex].cards.findIndex(c => c.id === cardId);
-    if (cardIndex === -1) {
-      throw new Error('Card não encontrado');
-    }
 
     // Atualiza os dados do card
     decks[deckIndex].cards[cardIndex] = {
@@ -129,9 +130,10 @@ export async function editarCard(usuario, deckId, cardId, novaPergunta, novaResp
 
     // Salva os decks atualizados de volta no AsyncStorage
     await AsyncStorage.setItem(`@decks_${usuario}`, JSON.stringify(decks));
-    return true;
-  } catch (erro) {
+    Alert.alert('Sucesso', 'Card atualizado!');
 
-    return false;
+  } catch (erro) {
+    console.log(erro);
+    Alert.alert('Erro', 'Falha ao atualizar card.');
   }
 }

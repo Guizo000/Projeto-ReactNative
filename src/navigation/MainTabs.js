@@ -5,7 +5,7 @@ import ConfigStack from './ConfigStack'
 
 const Tab = createBottomTabNavigator();
 
-// Telas principais após login
+//Telas do app principal
 export default function MainTabs() {
   return (
     <Tab.Navigator screenOptions={{ headerShown: false }}>

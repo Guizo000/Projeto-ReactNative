@@ -1,8 +1,8 @@
 import { useState, useEffect } from 'react';
 import { View, TextInput, Button, Text, Alert } from 'react-native';
-import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 import { saveDeck } from '../utils/decks';
+import { usuarioLogado } from '../utils/usuario'
 
 export default function CriarDeck() {
   const [titulo, setTitulo] = useState('');
@@ -17,17 +17,12 @@ export default function CriarDeck() {
 
   //Função chamada no UseEffect para definir o usuário atualmente logado
   async function setUsuarioLogado() {
-    try{
-      const usuarioAtual = await AsyncStorage.getItem('@usuario');
+      const usuarioAtual = await usuarioLogado();
       setUsuario(usuarioAtual);
-    }catch(erro){
-      console.log(erro);
-      Alert.alert('Erro', 'Falha ao tentar retornar decks!');
-    }
   }
 
   //Função que salva o deck
-  async function salvar() {
+  async function chamaSalvarDeck() {
     //Verifica se foi dado um nome ao deck
     if (!titulo.trim()) {
       Alert.alert('Erro', 'Digite um nome para o deck!');
@@ -49,7 +44,6 @@ export default function CriarDeck() {
 
     //Chama a função para salvar o deck
     await saveDeck(usuario, novoDeck);
-    Alert.alert('Sucesso', 'Deck criado com sucesso!');
     navigation.goBack();
   }
 
@@ -61,7 +55,7 @@ export default function CriarDeck() {
         value={titulo}
         onChangeText={setTitulo}
       />
-      <Button title="Salvar Deck" onPress={salvar} />
+      <Button title="Salvar Deck" onPress={chamaSalvarDeck} />
     </View>
   );
 }

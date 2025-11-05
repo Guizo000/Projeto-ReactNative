@@ -5,40 +5,27 @@ import { getDecks, excluirCard } from '../utils/decks';
 import { usuarioLogado } from '../utils/usuario'
 
 export default function DeckDetails() {
-  const [usuario, setUsuario] = useState('');
   const [deck, setDeck] = useState(null);
   const route = useRoute();
   const navigation = useNavigation();
   const isFocused = useIsFocused();
   const { deckId } = route.params;
 
-  //UseEffect para quando o compenente monta
-  //Define o usuário logado atualmente
-  useEffect(() => {
-    setUsuarioLogado();
-  }, []);
-  
-  //Função chamada no UseEffect para definir o usuário atualmente logado
-  async function setUsuarioLogado() {
-    const usuarioAtual = await usuarioLogado();
-    setUsuario(usuarioAtual);
-  }
-
-  //UseEffect para quando isFocused ou usuario mudam
+  //UseEffect para quando isFocused muda
   //Serve para dar reload nos decks sempre que o usuário volta pra essa pagina
-  //usuario serve pra primeira
   useEffect(() => {
-    if (usuario) carregarDeck();
-  }, [usuario, isFocused]);
-
-
-  //Função para ir a pagina de detalhes de um deck
-  function acessarCard(deckId, cardId, perguntaInicial, respostaInicial){
-    navigation.navigate("EditarCard", {deckId, cardId, perguntaInicial, respostaInicial});
-  }
+    carregarDeck();
+  }, [isFocused]);
 
   //Carrega o deck selecionado pelo usuario na tela anterior
   async function carregarDeck() {
+    //Retorna usuario logado
+    const usuario = await usuarioLogado();
+    //Verifica se existe um usuário logado
+    if (!usuario) {
+      Alert.alert('Erro', 'Usuário não identificado!');
+      return;
+    }
     //Retorna todos os decks do usuario
     const decks = await getDecks(usuario);
     //Procura o deck selecionando pelo usuario na tela anterior
@@ -60,8 +47,24 @@ export default function DeckDetails() {
 
   //Remoção de card
   async function removerCard(cardId) {
-    await excluirCard(usuario, deck.id, cardId);
+    const usuario = await usuarioLogado();
+    await excluirCard(usuario, deckId, cardId);
     carregarDeck(); // recarrega o deck atualizado
+  }
+
+  //Função para acessar EditarCard
+  function acessarEditarCard(deckId, cardId, perguntaInicial, respostaInicial){
+    navigation.navigate("EditarCard", {deckId, cardId, perguntaInicial, respostaInicial});
+  }
+
+  //Função para acessar AddCard
+  function acessarAddCard(){
+    navigation.navigate('AddCard', { deckId })
+  }
+
+  //Função para acessar Estudo
+  function acessarEstudo(){
+    navigation.navigate('Estudo', { deckId })
   }
 
   //Verifica se o deck ja foi carregado antes de renderizar
@@ -75,12 +78,12 @@ export default function DeckDetails() {
 
       <Button
         title="Adicionar Card"
-        onPress={() => navigation.navigate('AddCard', { deckId: deck.id })}
+        onPress={acessarAddCard}
       />
 
       <Button
         title="Iniciar Estudo"
-        onPress={() => navigation.navigate('Estudo', { deckId: deck.id })}
+        onPress={acessarEstudo}
       />
       
       <FlatList
@@ -88,7 +91,7 @@ export default function DeckDetails() {
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
           <View>
-            <TouchableOpacity onPress={() => acessarCard(deckId, item.id, item.pergunta, item.resposta)}>
+            <TouchableOpacity onPress={() => acessarEditarCard(deckId, item.id, item.pergunta, item.resposta)}>
               <Text>{item.pergunta}</Text>
             </TouchableOpacity>
 

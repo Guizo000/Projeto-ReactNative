@@ -10,15 +10,14 @@ export default function Configuracoes() {
   }
 
   //Função para ir a página de alteração de senha
-  function alterarSenha(){
+  function acessarAlterarSenha(){
     navigation.navigate("AlterarSenha");
   }
 
   return (
     <View>
-        <Text>Ola</Text>
         <Button title="Deslogar" onPress={deslogar} />
-        <Button title="Alterar Senha" onPress={alterarSenha} />
+        <Button title="Alterar Senha" onPress={acessarAlterarSenha} />
     </View>
   );
 }

@@ -10,9 +10,12 @@ export default function Login() {
 
   async function ler() {
     try {
+      //Pega a senha do usuário
       const senhaSalva = await AsyncStorage.getItem(usuario);
 
+      //Verifica se a senha não é null
       if (senhaSalva !== null) {
+        //Verifica se a senha inserida coincide com a senha salva
         if (senhaSalva === senha) {
           Alert.alert('Sucesso', 'Logado com sucesso!');
           await AsyncStorage.setItem('@usuario', usuario); // Guarda o usuário logado para usar no futuro
@@ -30,13 +33,12 @@ export default function Login() {
   }
 
   return (
-    <View style={{ padding: 20 }}>
+    <View>
       <Text>Usuário:</Text>
       <TextInput
         placeholder="Digite seu usuário"
         value={usuario}
         onChangeText={setUsuario}
-        style={{ borderWidth: 1, marginBottom: 10, padding: 5 }}
       />
 
       <Text>Senha:</Text>
@@ -45,7 +47,6 @@ export default function Login() {
         secureTextEntry
         value={senha}
         onChangeText={setSenha}
-        style={{ borderWidth: 1, marginBottom: 10, padding: 5 }}
       />
 
       <Button title="Logar" onPress={ler} />

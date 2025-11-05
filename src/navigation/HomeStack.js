@@ -3,6 +3,7 @@ import { Home, CriarDeck, DeckDetalhes, AddCard, Estudo, EditarCard } from  '../
 
 const Stack = createNativeStackNavigator();
 
+//Telas da tab home
 export default function HomeStack() {
   return (
     <Stack.Navigator>

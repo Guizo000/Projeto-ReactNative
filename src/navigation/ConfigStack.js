@@ -3,6 +3,7 @@ import { Configuracoes, AlterarSenha } from  '../telas'
 
 const Stack = createNativeStackNavigator();
 
+//Telas da tab configuracoes
 export default function HomeStack() {
   return (
     <Stack.Navigator>

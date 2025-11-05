@@ -5,27 +5,16 @@ import { addCardToDeck } from '../utils/decks';
 import { usuarioLogado } from '../utils/usuario'
 
 export default function AddCard() {
-  const [usuario, setUsuario] = useState('');
   const [pergunta, setPergunta] = useState('');
   const [resposta, setResposta] = useState('');
   const route = useRoute();
   const navigation = useNavigation();
   const { deckId } = route.params;
 
-  //UseEffect para quando o compenente monta
-  //Define o usuário logado atualmente
-  useEffect(() => {
-      setUsuarioLogado();
-  }, []);
-    
-  //Função chamada no UseEffect para definir o usuário atualmente logado
-  async function setUsuarioLogado() {
-    const usuarioAtual = await usuarioLogado();
-    setUsuario(usuarioAtual);
-  }
-
   //Função para salvar um card
-  async function salvarCard() {
+  async function chamaSalvarCard() {
+    //Retorna o usuário logado
+    const usuario = await usuarioLogado();
     //Verifica se tanto pergunta ou resposta estão vazias
     if (!pergunta.trim() || !resposta.trim()) {
       Alert.alert('Erro', 'Preencha a pergunta e a resposta!');
@@ -57,7 +46,7 @@ export default function AddCard() {
         value={resposta}
         onChangeText={setResposta}
       />
-      <Button title="Salvar Card" onPress={salvarCard} />
+      <Button title="Salvar Card" onPress={chamaSalvarCard} />
     </View>
   );
 }

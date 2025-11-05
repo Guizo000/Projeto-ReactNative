@@ -31,13 +31,8 @@ export default function Home() {
 
   //Função que carrega os decks
   async function carregarDecks() {
-    try{
-      const dados = await getDecks(usuario);
-      setDecks(dados);
-    }catch(erro){
-      console.log(erro);
-      Alert.alert('Erro', 'Não foi possível carregar os decks!');
-    }
+    const dados = await getDecks(usuario);
+    setDecks(dados);
   }
 
   //Confirmar remoção de deck
@@ -47,24 +42,24 @@ export default function Home() {
       'Tem certeza que deseja excluir este deck?',
       [
         { text: 'Cancelar', style: 'cancel' },
-        { text: 'Excluir', style: 'destructive', onPress: () => removerDeck(deckID) },
+        { text: 'Excluir', style: 'destructive', onPress: () => chamarExcluirDeck(deckID) },
       ]
     );
   }
 
   //Função que exlui o deck
-  async function removerDeck(deckId) {
+  async function chamarExcluirDeck(deckId) {
     await excluirDeck(usuario, deckId);
     carregarDecks(); // recarrega lista
   }
 
   //Função para ir a pagina de criação de decks
-  function criarDeck(){
+  function acessarCriarDeck(){
     navigation.navigate("CriarDeck");
   }
 
   //Função para ir a pagina de detalhes de um deck
-  function acessarDeck(deckId){
+  function acessarDeckDetalhes(deckId){
     navigation.navigate("DeckDetalhes", {deckId});
   }
       
@@ -72,35 +67,27 @@ export default function Home() {
     <View>
       <Text>Olá, {usuario}</Text>
 
-      <Button title="Criar Deck" onPress={criarDeck} /> 
+      <Button title="Criar Deck" onPress={acessarCriarDeck} /> 
 
-      {/*
-      Operador ternário para renderizar lista de decks
-        Caso  n seja encontrado nenhum deck renderiza uma 
-        mensagem no lugar
-      */}
-      {decks.length === 0 ? ( <Text>Nenhum deck criado ainda.</Text>) : 
-      (
-        <FlatList
-          data={decks}
-          keyExtractor={(item) => item.id}
-          renderItem={({ item }) => (
-            <View> 
-              <TouchableOpacity onPress={() => acessarDeck(item.id)}>
-                <Text>{item.titulo}</Text>
-                <Text>{item.cards.length} cards</Text>
-              </TouchableOpacity>
+      <FlatList
+        data={decks}
+        keyExtractor={(item) => item.id}
+        renderItem={({ item }) => (
+          <View> 
+            <TouchableOpacity onPress={() => acessarDeckDetalhes(item.id)}>
+              <Text>{item.titulo}</Text>
+              <Text>{item.cards.length} cards</Text>
+            </TouchableOpacity>
 
-              <Button
-              title="Excluir"
-              onPress={() => confirmarRemocao(item.id)}
-              color="red"
-              />
-            </View>
-          )}
-        />
-      )}
-
+            <Button
+            title="Excluir"
+            onPress={() => confirmarRemocao(item.id)}
+            color="red"
+            />
+          </View>
+        )}
+        ListEmptyComponent={<Text>Nenhum deck criado ainda.</Text>}
+      />
     </View>
   );
 }
