@@ -1,64 +1,98 @@
 import { useState, useEffect } from 'react';
-import { View, TextInput, Button, Text, Alert } from 'react-native';
+import { View, TextInput, Button, Text, Alert, StyleSheet } from 'react-native';
 import { useNavigation } from '@react-navigation/native';
 import { saveDeck } from '../utils/decks';
-import { usuarioLogado } from '../utils/usuario'
+import { usuarioLogado } from '../utils/usuario';
 
 export default function CriarDeck() {
   const [titulo, setTitulo] = useState('');
   const [usuario, setUsuario] = useState('');
   const navigation = useNavigation();
 
-  //UseEffect para quando o compenente monta
-  //Define o usuário logado atualmente
   useEffect(() => {
     setUsuarioLogado();
   }, []);
 
-  //Função chamada no UseEffect para definir o usuário atualmente logado
   async function setUsuarioLogado() {
-      const usuarioAtual = await usuarioLogado();
-      setUsuario(usuarioAtual);
+    const usuarioAtual = await usuarioLogado();
+    setUsuario(usuarioAtual);
   }
 
-  //Função que salva o deck
   async function chamaSalvarDeck() {
-    //Verifica se foi dado um nome ao deck
     if (!titulo.trim()) {
       Alert.alert('Erro', 'Digite um nome para o deck!');
       return;
     }
 
-    //Verifica se existe um usuário logado
     if (!usuario) {
       Alert.alert('Erro', 'Usuário não identificado!');
       return;
     }
 
-    //Cria a estrutura do novo deck
     const novoDeck = {
       id: Date.now().toString(),
       titulo,
       cards: [],
     };
 
-    //Chama a função para salvar o deck
     await saveDeck(usuario, novoDeck);
+    Alert.alert('Sucesso', 'Deck criado com sucesso!');
     navigation.goBack();
   }
 
   return (
-    <View>
-      <Text>Nome do novo deck</Text>
+    <View style={styles.container}>
+      <Text style={styles.titulo}>Criar Novo Deck</Text>
+
+      <Text style={styles.label}>Nome do deck:</Text>
       <TextInput
-        placeholder="Nome do deck"
+        style={styles.input}
+        placeholder="Digite o nome do deck"
         value={titulo}
         onChangeText={setTitulo}
+        placeholderTextColor="#9ca3af"
       />
-      <Button title="Salvar Deck" onPress={chamaSalvarDeck} />
+
+      <View style={styles.botaoContainer}>
+        <Button title="Salvar Deck" onPress={chamaSalvarDeck} color="#2563eb" />
+      </View>
     </View>
   );
 }
 
-
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f9fafb',
+    padding: 25,
+    justifyContent: 'center',
+  },
+  titulo: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#111827',
+    textAlign: 'center',
+    marginBottom: 30,
+  },
+  label: {
+    fontSize: 16,
+    color: '#374151',
+    marginBottom: 8,
+  },
+  input: {
+    backgroundColor: '#fff',
+    borderRadius: 10,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+    paddingHorizontal: 15,
+    paddingVertical: 12,
+    fontSize: 16,
+    color: '#111827',
+    marginBottom: 20,
+  },
+  botaoContainer: {
+    marginTop: 10,
+    borderRadius: 12,
+    overflow: 'hidden',
+  },
+});

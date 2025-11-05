@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { View, Text, TextInput, Button, Alert } from 'react-native';
+import { View, Text, TextInput, Button, Alert, StyleSheet } from 'react-native';
 import AsyncStorage from '@react-native-async-storage/async-storage';
 import { useNavigation } from '@react-navigation/native';
 
@@ -10,16 +10,13 @@ export default function Login() {
 
   async function ler() {
     try {
-      //Pega a senha do usuário
       const senhaSalva = await AsyncStorage.getItem(usuario);
 
-      //Verifica se a senha não é null
       if (senhaSalva !== null) {
-        //Verifica se a senha inserida coincide com a senha salva
         if (senhaSalva === senha) {
           Alert.alert('Sucesso', 'Logado com sucesso!');
-          await AsyncStorage.setItem('@usuario', usuario); // Guarda o usuário logado para usar no futuro
-          navigation.replace('MainTabs'); // Troca a navegação pra o app principal
+          await AsyncStorage.setItem('@usuario', usuario);
+          navigation.replace('MainTabs');
         } else {
           Alert.alert('Erro', 'Senha incorreta!');
         }
@@ -33,23 +30,66 @@ export default function Login() {
   }
 
   return (
-    <View>
-      <Text>Usuário:</Text>
+    <View style={styles.container}>
+      <Text style={styles.title}>Bem-vindo de volta!</Text>
+
       <TextInput
-        placeholder="Digite seu usuário"
+        placeholder="Usuário"
+        style={styles.input}
         value={usuario}
         onChangeText={setUsuario}
       />
 
-      <Text>Senha:</Text>
       <TextInput
-        placeholder="Digite sua senha"
+        placeholder="Senha"
         secureTextEntry
+        style={styles.input}
         value={senha}
         onChangeText={setSenha}
       />
 
-      <Button title="Logar" onPress={ler} />
+      <View style={styles.buttonContainer}>
+        <Button title="Entrar" onPress={ler} color="#3b82f6" />
+      </View>
+
     </View>
   );
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: '#f9fafb',
+    paddingHorizontal: 20,
+  },
+  title: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#111827',
+    marginBottom: 30,
+  },
+  input: {
+    width: '100%',
+    backgroundColor: '#fff',
+    borderWidth: 1,
+    borderColor: '#d1d5db',
+    borderRadius: 10,
+    padding: 12,
+    fontSize: 16,
+    marginBottom: 15,
+    elevation: 1,
+  },
+  buttonContainer: {
+    width: '100%',
+    marginTop: 10,
+    borderRadius: 10,
+    overflow: 'hidden',
+  },
+  link: {
+    marginTop: 25,
+    color: '#3b82f6',
+    fontWeight: '500',
+  },
+});

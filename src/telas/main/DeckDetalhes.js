@@ -1,8 +1,16 @@
 import { useEffect, useState } from 'react';
-import { View, Text, Button, FlatList, TouchableOpacity, Alert } from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  FlatList,
+  TouchableOpacity,
+  Alert,
+  StyleSheet,
+} from 'react-native';
 import { useRoute, useNavigation, useIsFocused } from '@react-navigation/native';
 import { getDecks, excluirCard } from '../utils/decks';
-import { usuarioLogado } from '../utils/usuario'
+import { usuarioLogado } from '../utils/usuario';
 
 export default function DeckDetails() {
   const [deck, setDeck] = useState(null);
@@ -11,29 +19,21 @@ export default function DeckDetails() {
   const isFocused = useIsFocused();
   const { deckId } = route.params;
 
-  //UseEffect para quando isFocused muda
-  //Serve para dar reload nos decks sempre que o usuário volta pra essa pagina
   useEffect(() => {
     carregarDeck();
   }, [isFocused]);
 
-  //Carrega o deck selecionado pelo usuario na tela anterior
   async function carregarDeck() {
-    //Retorna usuario logado
     const usuario = await usuarioLogado();
-    //Verifica se existe um usuário logado
     if (!usuario) {
       Alert.alert('Erro', 'Usuário não identificado!');
       return;
     }
-    //Retorna todos os decks do usuario
     const decks = await getDecks(usuario);
-    //Procura o deck selecionando pelo usuario na tela anterior
     const deckEncontrado = decks.find(d => d.id === deckId);
     setDeck(deckEncontrado);
   }
 
-  //Confirmar remoção de card
   async function confirmarRemover(cardId) {
     Alert.alert(
       'Excluir Card',
@@ -45,67 +45,118 @@ export default function DeckDetails() {
     );
   }
 
-  //Remoção de card
   async function removerCard(cardId) {
     const usuario = await usuarioLogado();
     await excluirCard(usuario, deckId, cardId);
-    carregarDeck(); // recarrega o deck atualizado
+    carregarDeck();
   }
 
-  //Função para acessar EditarCard
-  function acessarEditarCard(deckId, cardId, perguntaInicial, respostaInicial){
-    navigation.navigate("EditarCard", {deckId, cardId, perguntaInicial, respostaInicial});
+  function acessarEditarCard(deckId, cardId, perguntaInicial, respostaInicial) {
+    navigation.navigate('EditarCard', { deckId, cardId, perguntaInicial, respostaInicial });
   }
 
-  //Função para acessar AddCard
-  function acessarAddCard(){
-    navigation.navigate('AddCard', { deckId })
+  function acessarAddCard() {
+    navigation.navigate('AddCard', { deckId });
   }
 
-  //Função para acessar Estudo
-  function acessarEstudo(){
-    navigation.navigate('Estudo', { deckId })
+  function acessarEstudo() {
+    navigation.navigate('Estudo', { deckId });
   }
 
-  //Verifica se o deck ja foi carregado antes de renderizar
-  if (!deck) {
-    return <Text>Carregando...</Text>;
-  }
+  if (!deck) return <Text style={styles.loading}>Carregando...</Text>;
 
   return (
-    <View>
-      <Text>{deck.titulo}</Text>
+    <View style={styles.container}>
+      <Text style={styles.titulo}>{deck.titulo}</Text>
+      <Text style={styles.subtitulo}>{deck.cards.length} cards</Text>
 
-      <Button
-        title="Adicionar Card"
-        onPress={acessarAddCard}
-      />
+      <View style={styles.botoesTopo}>
+        <Button title="➕ Novo Card" onPress={acessarAddCard} color="#2563eb" />
+        <Button title="📚 Estudar" onPress={acessarEstudo} color="#16a34a" />
+      </View>
 
-      <Button
-        title="Iniciar Estudo"
-        onPress={acessarEstudo}
-      />
-      
       <FlatList
         data={deck.cards}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <View>
-            <TouchableOpacity onPress={() => acessarEditarCard(deckId, item.id, item.pergunta, item.resposta)}>
-              <Text>{item.pergunta}</Text>
+          <View style={styles.card}>
+            <TouchableOpacity
+              onPress={() =>
+                acessarEditarCard(deckId, item.id, item.pergunta, item.resposta)
+              }
+            >
+              <Text style={styles.cardPergunta}>{item.pergunta}</Text>
             </TouchableOpacity>
 
-            <Button
-            title="Excluir"
-            color="red"
-            onPress={() => confirmarRemover(item.id)}
-            />
+            <TouchableOpacity
+              onPress={() => confirmarRemover(item.id)}
+              style={styles.botaoExcluir}
+            >
+              <Text style={styles.textoExcluir}>Excluir</Text>
+            </TouchableOpacity>
           </View>
         )}
-        ListEmptyComponent={<Text>Nenhum card ainda</Text>}
+        ListEmptyComponent={<Text style={styles.empty}>Nenhum card ainda</Text>}
       />
     </View>
   );
 }
 
-
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: '#f9fafb',
+    padding: 20,
+  },
+  titulo: {
+    fontSize: 26,
+    fontWeight: 'bold',
+    color: '#111827',
+    textAlign: 'center',
+  },
+  subtitulo: {
+    fontSize: 16,
+    color: '#6b7280',
+    textAlign: 'center',
+    marginBottom: 20,
+  },
+  botoesTopo: {
+    flexDirection: 'row',
+    justifyContent: 'space-around',
+    marginBottom: 25,
+  },
+  card: {
+    backgroundColor: '#fff',
+    borderRadius: 12,
+    padding: 15,
+    marginBottom: 12,
+    borderWidth: 1,
+    borderColor: '#e5e7eb',
+  },
+  cardPergunta: {
+    fontSize: 18,
+    fontWeight: 'bold',
+    color: '#111827',
+  },
+  botaoExcluir: {
+    marginTop: 10,
+    alignSelf: 'flex-end',
+  },
+  textoExcluir: {
+    color: '#dc2626',
+    fontWeight: 'bold',
+  },
+  loading: {
+    flex: 1,
+    textAlign: 'center',
+    fontSize: 18,
+    color: '#6b7280',
+    marginTop: 50,
+  },
+  empty: {
+    textAlign: 'center',
+    color: '#9ca3af',
+    fontSize: 16,
+    marginTop: 30,
+  },
+});
