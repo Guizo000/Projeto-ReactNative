@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
 import { View, Text, Button, FlatList, TouchableOpacity } from 'react-native';
 import { useRoute, useNavigation, useIsFocused } from '@react-navigation/native';
-import { getDecks } from '../utils/decks';
+import { getDecks, excluirCard } from '../utils/decks';
 import { usuarioLogado } from '../utils/usuario'
 
 export default function DeckDetails() {
@@ -40,6 +40,12 @@ export default function DeckDetails() {
     setDeck(deckEncontrado);
   }
 
+  //Fução para remover card
+  async function removerCard(cardId) {
+    await excluirCard(usuario, deck.id, cardId);
+    carregarDeck(); // recarrega o deck atualizado
+  }
+
   //Verifica se o deck ja foi carregado antes de renderizar
   if (!deck) {
     return <Text>Carregando...</Text>;
@@ -63,9 +69,17 @@ export default function DeckDetails() {
         data={deck.cards}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity>
-            <Text>{item.pergunta}</Text>
-          </TouchableOpacity>
+          <View>
+            <TouchableOpacity>
+              <Text>{item.pergunta}</Text>
+            </TouchableOpacity>
+
+            <Button
+            title="Excluir"
+            color="red"
+            onPress={() => removerCard(item.id)}
+            />
+          </View>
         )}
         ListEmptyComponent={<Text>Nenhum card ainda</Text>}
       />

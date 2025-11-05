@@ -79,3 +79,25 @@ export async function addCardToDeck(usuario, deckId, card) {
   }
   
 }
+
+// Exclui um card específico de um deck
+export async function excluirCard(usuario, deckId, cardId) {
+  try {
+    const decks = await getDecks(usuario);
+    // Encontra o deck alvo
+    const decksAtualizados = decks.map(deck => {
+      if (deck.id === deckId) {
+        // Remove o card com o id correspondente
+        const cardsFiltrados = deck.cards.filter(card => card.id !== cardId);
+        return { ...deck, cards: cardsFiltrados };
+      }
+      return deck;
+    });
+
+    // Salva os decks atualizados
+    await AsyncStorage.setItem(`@decks_${usuario}`, JSON.stringify(decksAtualizados));
+  } catch (erro) {
+    console.log(erro);
+    Alert.alert('Erro', 'Falha ao tentar excluir card'); 
+  }
+}
