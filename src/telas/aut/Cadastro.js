@@ -8,6 +8,12 @@ export default function Cadastro() {
 
   async function gravar() {
     try {
+      const senha = await AsyncStorage.getItem(user);
+      if(senha != null){
+        Alert.alert('Erro', 'Usuário já cadastrado!');
+        return;
+      } 
+
       await AsyncStorage.setItem(user, password);
       Alert.alert('Sucesso', 'Usuário cadastrado com sucesso!');
       setUser('');

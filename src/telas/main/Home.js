@@ -46,11 +46,6 @@ export default function Home() {
     carregarDecks(); // recarrega lista
   }
 
-  //Função para deslogar
-  function deslogar(){
-    navigation.replace("AutTabs"); 
-  }
-
   //Função para ir a pagina de criação de decks
   function criarDeck(){
     navigation.navigate("CriarDeck");
@@ -94,7 +89,6 @@ export default function Home() {
         />
       )}
 
-      <Button title="Deslogar" onPress={deslogar} />
     </View>
   );
 }
