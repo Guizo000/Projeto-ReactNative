@@ -86,8 +86,7 @@ Durante o desenvolvimento deste projeto, aprimorei significativamente minhas hab
 
 - Estruturar um aplicativo mobile completo do zero, desde o conceito até a entrega funcional.
 
-Acredito também que guardo como experiência pessoal a dificuldade de implementar um projeto como este e a lição de lidar com indecisões  
-no planejamento e implementação do projeto de forma rápida e concisa de modo a não prejudicar o andamento da construção do aplicativo.
+Acredito também que guardo como experiência pessoal a dificuldade de implementar um projeto como este e a lição de lidar com indecisões no planejamento e implementação do projeto de forma rápida e concisa de modo a não prejudicar o andamento da construção do aplicativo.
 
 Para evoluir ainda mais o aplicativo, acredito que os próximos passos sejam:
 
@@ -96,6 +95,7 @@ Para evoluir ainda mais o aplicativo, acredito que os próximos passos sejam:
 - Adicionar estatísticas de estudo (tempo e desempenho).
   
 - Criar modo de revisão espaçada.
+
 
 
 
