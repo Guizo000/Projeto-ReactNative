@@ -41,6 +41,9 @@ Requisitos funcionais:
 - Configurações: Alterar senha e sair da conta
 - Armazenamento: O armazenamento de todos os dados é feito de forma local pelo Async Storage
 
+## 🎥 Demonstração
+https://github.com/user-attachments/assets/dd38d8ac-7872-4219-8402-1ac3b8f1da95
+
 ## 💻 Instalação e Execução
 Para executar os scripts faça:
 1. Clone o repositório:
@@ -77,4 +80,5 @@ Os próximos passos para aperfeiçoar o projeto em minha opinião são:
 - Implementar sincronização com banco de dados.
 - Adicionar estatísticas de estudo (tempo e desempenho).
 - Criar modo de revisão espaçada.
+
 
